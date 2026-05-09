@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Wallpaper Switcher</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: black;
+    }
+
+    #background {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    #info {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: white;
+      font-family: Arial;
+      background: rgba(0,0,0,0.5);
+      padding: 8px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="info">
+  Press keys 1–6 to switch wallpapers
+</div>
+
+<!-- Video -->
+<video id="background" autoplay muted loop></video>
+
+<script>
+  const bg = document.getElementById("background");
+
+  const wallpapers = {
+    1: { type: "video", src: "1.mp4" },
+    2: { type: "gif", src: "2.gif" },
+    3: { type: "gif", src: "3.gif" },
+    4: { type: "image", src: "4.jpg" },
+    5: { type: "image", src: "5.jpg" },
+    6: { type: "image", src: "6.jpg" }
+  };
+
+  function setWallpaper(key) {
+    const item = wallpapers[key];
+    if (!item) return;
+
+    // Remove existing element
+    let old = document.getElementById("bg-element");
+    if (old) old.remove();
+
+    let element;
+
+    if (item.type === "video") {
+      element = document.createElement("video");
+      element.src = item.src;
+      element.autoplay = true;
+      element.loop = true;
+      element.muted = true;
+    } else {
+      element = document.createElement("img");
+      element.src = item.src;
+    }
+
+    element.id = "bg-element";
+    element.style.position = "fixed";
+    element.style.width = "100%";
+    element.style.height = "100%";
+    element.style.objectFit = "cover";
+    element.style.zIndex = "-1";
+
+    document.body.appendChild(element);
+  }
+
+  // Key press listener
+  document.addEventListener("keydown", (e) => {
+    const key = e.key;
+    if (wallpapers[key]) {
+      setWallpaper(key);
+    }
+  });
+
+  // Default wallpaper
+  setWallpaper(1);
+</script>
+
+</body>
+</html>
