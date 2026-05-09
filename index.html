@@ -1,100 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Live Wallpaper Switcher</title>
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
-      background: black;
-    }
-
-    #background {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
-    }
-
-    #info {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      color: white;
-      font-family: Arial;
-      background: rgba(0,0,0,0.5);
-      padding: 8px;
-      border-radius: 8px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Press 1-6</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #111;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            padding: 20px;
+            background: #1a1a1a;
+            border-bottom: 2px solid #0f0;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 0 0 10px #0f0;
+        }
+        
+        .instructions {
+            margin: 10px 0 20px;
+            font-size: 1.1em;
+            opacity: 0.8;
+        }
+        
+        #media-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+        
+        #media {
+            max-width: 100%;
+            max-height: 100%;
+            border: 3px solid #0f0;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+            border-radius: 8px;
+        }
+        
+        video#media {
+            width: 90%;
+            height: auto;
+        }
+        
+        .info {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 25px;
+            border-radius: 30px;
+            border: 1px solid #0f0;
+            font-size: 1.2em;
+        }
+        
+        footer {
+            padding: 15px;
+            font-size: 0.9em;
+            opacity: 0.6;
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>PRESS 1 - 6</h1>
+        <div class="instructions">
+            1 = Video • 2 = GIF • 3 = GIF • 4-6 = JPG
+        </div>
+    </header>
+    
+    <div id="media-container">
+        <!-- Media will be inserted here by JavaScript -->
+    </div>
+    
+    <div class="info" id="current-info">Ready — Press a number</div>
+    
+    <footer>
+        Keyboard only • Files must be in the same folder
+    </footer>
 
-<div id="info">
-  Press keys 1–6 to switch wallpapers
-</div>
+    <script>
+        const container = document.getElementById('media-container');
+        const info = document.getElementById('current-info');
 
-<!-- Video -->
-<video id="background" autoplay muted loop></video>
+        function showMedia(num) {
+            // Clear previous content
+            container.innerHTML = '';
+            
+            let mediaElement;
+            let displayText = `Media ${num}`;
+            
+            switch(num) {
+                case 1:
+                    // Video
+                    mediaElement = document.createElement('video');
+                    mediaElement.id = 'media';
+                    mediaElement.src = '1.mp4';
+                    mediaElement.controls = true;
+                    mediaElement.autoplay = true;
+                    mediaElement.loop = true;
+                    displayText = '1 - Video (1.mp4)';
+                    break;
+                    
+                case 2:
+                    // GIF 1
+                    mediaElement = document.createElement('img');
+                    mediaElement.id = 'media';
+                    mediaElement.src = '2.gif';
+                    displayText = '2 - Animation (2.gif)';
+                    break;
+                    
+                case 3:
+                    // GIF 2
+                    mediaElement = document.createElement('img');
+                    mediaElement.id = 'media';
+                    mediaElement.src = '3.gif';
+                    displayText = '3 - Animation (3.gif)';
+                    break;
+                    
+                case 4:
+                    // JPG 1
+                    mediaElement = document.createElement('img');
+                    mediaElement.id = 'media';
+                    mediaElement.src = '4.jpg';
+                    displayText = '4 - Image (4.jpg)';
+                    break;
+                    
+                case 5:
+                    // JPG 2
+                    mediaElement = document.createElement('img');
+                    mediaElement.id = 'media';
+                    mediaElement.src = '5.jpg';
+                    displayText = '5 - Image (5.jpg)';
+                    break;
+                    
+                case 6:
+                    // JPG 3
+                    mediaElement = document.createElement('img');
+                    mediaElement.id = 'media';
+                    mediaElement.src = '6.jpg';
+                    displayText = '6 - Image (6.jpg)';
+                    break;
+            }
+            
+            if (mediaElement) {
+                container.appendChild(mediaElement);
+                info.textContent = displayText;
+            }
+        }
 
-<script>
-  const bg = document.getElementById("background");
+        // Keyboard listener
+        document.addEventListener('keydown', function(e) {
+            const key = parseInt(e.key);
+            
+            if (key >= 1 && key <= 6) {
+                showMedia(key);
+            }
+        });
 
-  const wallpapers = {
-    1: { type: "video", src: "1.mp4" },
-    2: { type: "gif", src: "2.gif" },
-    3: { type: "gif", src: "3.gif" },
-    4: { type: "image", src: "4.jpg" },
-    5: { type: "image", src: "5.jpg" },
-    6: { type: "image", src: "6.jpg" }
-  };
+        // Optional: Click anywhere to show random media
+        document.addEventListener('click', function() {
+            const random = Math.floor(Math.random() * 6) + 1;
+            showMedia(random);
+        });
 
-  function setWallpaper(key) {
-    const item = wallpapers[key];
-    if (!item) return;
-
-    // Remove existing element
-    let old = document.getElementById("bg-element");
-    if (old) old.remove();
-
-    let element;
-
-    if (item.type === "video") {
-      element = document.createElement("video");
-      element.src = item.src;
-      element.autoplay = true;
-      element.loop = true;
-      element.muted = true;
-    } else {
-      element = document.createElement("img");
-      element.src = item.src;
-    }
-
-    element.id = "bg-element";
-    element.style.position = "fixed";
-    element.style.width = "100%";
-    element.style.height = "100%";
-    element.style.objectFit = "cover";
-    element.style.zIndex = "-1";
-
-    document.body.appendChild(element);
-  }
-
-  // Key press listener
-  document.addEventListener("keydown", (e) => {
-    const key = e.key;
-    if (wallpapers[key]) {
-      setWallpaper(key);
-    }
-  });
-
-  // Default wallpaper
-  setWallpaper(1);
-</script>
-
+        // Show welcome message
+        info.textContent = "Press 1-6 on your keyboard";
+    </script>
 </body>
 </html>
