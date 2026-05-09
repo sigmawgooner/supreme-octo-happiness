@@ -10,94 +10,145 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+       
         body {
             background: #000;
             height: 100vh;
             overflow: hidden;
             font-family: Arial, sans-serif;
+            display: flex;
         }
-        
+
+        /* Sidebar Buttons */
+        .sidebar {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 8px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 20;
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar button {
+            width: 50px;
+            height: 50px;
+            background: white;
+            color: black;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar button:hover {
+            background: #f0f0f0;
+            transform: scale(1.08);
+        }
+
+        .sidebar button:active {
+            transform: scale(0.95);
+        }
+
+        /* Media Container */
         #media-container {
-            width: 100%;
+            flex: 1;
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             background: #000;
         }
-        
+
         #media {
             width: 100%;
             height: 100%;
-            object-fit: contain;        /* Change to 'cover' if you want it to fill screen completely */
+            object-fit: contain;
         }
-        
-        .overlay {
+
+        /* Current Media Info */
+        .info {
             position: absolute;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
             color: white;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 8px 18px;
             border-radius: 8px;
-            font-size: 18px;
+            font-size: 16px;
             pointer-events: none;
             z-index: 10;
         }
     </style>
 </head>
 <body>
+    <!-- Left Side Buttons -->
+    <div class="sidebar">
+        <button onclick="showMedia(1)">1</button>
+        <button onclick="showMedia(2)">2</button>
+        <button onclick="showMedia(3)">3</button>
+        <button onclick="showMedia(4)">4</button>
+        <button onclick="showMedia(5)">5</button>
+        <button onclick="showMedia(6)">6</button>
+    </div>
 
-    <div class="overlay" id="info">Press 1 to 6</div>
-    
     <div id="media-container"></div>
+    
+    <div class="info" id="info">Select a number</div>
 
     <script>
         const container = document.getElementById('media-container');
         const info = document.getElementById('info');
 
         function showMedia(num) {
-            container.innerHTML = '';   // Clear previous media
-            
+            container.innerHTML = ''; // Clear previous media
+           
             let element;
-            
+           
             switch(num) {
                 case 1:
                     element = document.createElement('video');
                     element.src = '1.mp4';
                     element.autoplay = true;
                     element.loop = true;
-                    element.muted = true;           // Muted so it plays automatically
+                    element.muted = true;
                     break;
-                    
+                   
                 case 2:
                     element = document.createElement('img');
                     element.src = '2.gif';
                     break;
-                    
+                   
                 case 3:
                     element = document.createElement('img');
                     element.src = '3.gif';
                     break;
-                    
+                   
                 case 4:
                     element = document.createElement('img');
                     element.src = '4.jpg';
                     break;
-                    
+                   
                 case 5:
                     element = document.createElement('img');
                     element.src = '5.jpg';
                     break;
-                    
+                   
                 case 6:
                     element = document.createElement('img');
                     element.src = '6.jpg';
                     break;
             }
-            
+           
             if (element) {
                 element.id = 'media';
                 container.appendChild(element);
@@ -113,13 +164,13 @@
             }
         });
 
-        // Optional: Click to show random
-        document.addEventListener('click', () => {
+        // Optional: Click anywhere on the right side for random media
+        document.getElementById('media-container').addEventListener('click', () => {
             const random = Math.floor(Math.random() * 6) + 1;
             showMedia(random);
         });
 
-        // Show first media automatically (optional)
+        // Show first media on load (optional - remove if you don't want it)
         // showMedia(1);
     </script>
 </body>
